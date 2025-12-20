@@ -3,21 +3,25 @@ const express = require("express")
 const cors = require("cors");
 const nodemailer = require("nodemailer")
 const bodyParser = require("body-parser");
+const helmet = require("helmet")
 
 const port = process.env.PORT || 3000
 const app = express();
 
 
 app.use(cors())
+app.use(helmet())
 
 app.use(bodyParser.json())
 
-app.post('/send-message', (req, res) => {
+app.post('/', (req, res) => {
     const {name, email, message} = req.body
 
     if (!name || !email || !message) {
         res.status(400).json({message: "Fields are Empty"})
     }
+
+    res.status(200).json({message: "Message Sent Successfully"})
 
     const transporter = nodemailer.createTransport({
         service: 'Gmail',
