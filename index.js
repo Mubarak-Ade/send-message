@@ -4,7 +4,7 @@ const cors = require("cors");
 const nodemailer = require("nodemailer")
 const bodyParser = require("body-parser");
 const helmet = require("helmet")
-
+const process = require("process")
 const port = process.env.PORT || 3000
 const app = express();
 
@@ -14,7 +14,20 @@ app.use(helmet())
 
 app.use(bodyParser.json())
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
+    res.send("Hello World")
+})
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+  });
+});
+
+
+app.post('/send', (req, res) => {
     const {name, email, message} = req.body
 
     if (!name || !email || !message) {
